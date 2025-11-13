@@ -1,8 +1,72 @@
+// Online C compiler to run C program online
 #include <stdio.h>
 #include <string.h>
 
 int main() {
+int cube[3][3][3];
+int pos;
+int f,r,c;
+for (int i=0;i<3;i++){
+    for (int j=0;j<3;j++){
+        for (int k=0; k<3;k++){
+            cube[i][j][k]=1;
+        }
+    }
+}
+//face 0 back face 1 mid face 2 front
 
+printf("Back face 0\n");
+for (int i=0;i<3;i++){
+    for (int j=0;j<3;j++){
+        if (cube[0][i][j]==0) {
+            printf("_ ");
+        }
+        if (cube[0][i][j]==-1) {
+            printf("O ");
+        }
+        if (cube[0][i][j]==1) {
+            printf("x ");
+        }
+    }
+    printf("\n");
+}
+printf("Mid face 1\n");
+for (int i=0;i<3;i++){
+    for (int j=0;j<3;j++){
+        if (cube[1][i][j]==0) {
+            printf("_ ");
+        }
+        if (cube[1][i][j]==-1) {
+            printf("O ");
+        }
+        if (cube[1][i][j]==1) {
+            printf("x ");
+        }
+    }
+    printf("\n");
+}
+printf("Front face 2\n");
+for (int i=0;i<3;i++){
+    for (int j=0;j<3;j++){
+        if (cube[2][i][j]==0) {
+            printf("_ ");
+        }
+        if (cube[2][i][j]==-1) {
+            printf("O ");
+        }
+        if (cube[2][i][j]==1) {
+            printf("x ");
+        }
+    }
+    printf("\n");
+}
+printf("Which positon would you like to enter your X or O \n");
+scanf("%d",&pos);
+f= (pos-(pos % 100))/100; // face number
+r= (pos % 100-pos % 10)/10; //row number
+c= pos % 10;        //column number
+printf("%d %d %d",f,r,c);
+//111 is not available
 
-
+    return 0;
 }
