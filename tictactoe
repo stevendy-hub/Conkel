@@ -1,72 +1,260 @@
-// Online C compiler to run C program online
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+void print3d(int cube[3][3][3], int face, const char *label) { //function to print faces of the tictactoe board
+    printf("%s face %d\n", label, face); //prints face label
+    printf("  0 1 2\n"); //prints column label
+    for (int i = 0; i < 3; i++) {
+        printf("%d ",i);  //prints row label
+        for (int j = 0; j < 3; j++) {
+            if (cube[face][i][j] == 0) { //prints _ if no entry yet
+                printf("_ ");
+            }
+            else if (cube[face][i][j] == -1) { //prints O if there is a -1 on cube array
+                printf("O ");
+            }
+            else if (cube[face][i][j] == 1) { //prints X if there is a -1 on cube array
+                printf("x ");
+            }
+        }
+        printf("\n"); //prints next line after every row
+    }
+}
+int checkwin(int cube[3][3][3]){
+    int checkwinbool=0;
+    int sum;
+    for (int m=0;m<3;m++){ //checks winning condition for same face and row
+        for(int n=0;n<3;n++) {
+            sum=cube[m][n][0]+cube[m][n][1]+cube[m][n][2];
+            if (sum==3){
+                printf("Winning condition has been met, Player 2 won\n");
+                checkwinbool=1;
+            }
+            if (sum==-3){
+                printf("Winning condition has been met, Player 1 won\n");
+                checkwinbool=1;
+            }
+        }
+    }
+    for (int m=0;m<3;m++){ //checks winning condition for same face and column
+        for(int n=0;n<3;n++) {
+            sum=cube[m][0][n]+cube[m][1][n]+cube[m][2][n];
+            if (sum==3){
+                printf("Winning condition has been met, Player 2 won\n");
+                checkwinbool=1;
+            }
+            if (sum==-3){
+                printf("Winning condition has been met, Player 1 won\n");
+                checkwinbool=1;
+            }
+        }
+    }
+    for (int m=0;m<3;m++){ //checks winning condition for same row and column
+        for(int n=0;n<3;n++) {
+            sum=cube[0][m][n]+cube[1][m][n]+cube[2][m][n];
+            if (sum==3){
+                printf("Winning condition has been met, Player 2 won\n");
+                checkwinbool=1;
+            }
+            if (sum==-3){
+                printf("Winning condition has been met, Player 1 won\n");
+                checkwinbool=1;
+            }
+        }
+    }
+    for (int m=0;m<3;m++){ //check winning condition for face,row and column diagonals m00,m11,m22, m20,m11,m02
+            sum=cube[m][0][0]+cube[m][1][1]+cube[m][2][2]; // checks for face diagonal winning backward slash
+            if (sum==3){
+                printf("Winning condition has been met, Player 2 won\n");
+                checkwinbool=1;
+            }
+            if (sum==-3){
+                printf("Winning condition has been met, Player 1 won\n");
+                checkwinbool=1;
+            }
+            sum=cube[m][2][0]+cube[m][1][1]+cube[m][0][2]; // checks for face diagonal winning forward slash
+            if (sum==3){
+                printf("Winning condition has been met, Player 2 won\n");
+                checkwinbool=1;
+            }
+            if (sum==-3){
+                printf("Winning condition has been met, Player 1 won\n");
+                checkwinbool=1;
+            } //end face diagonal, start of row diagonal check
+            sum=cube[0][m][0]+cube[1][m][1]+cube[2][m][2]; // checks for row diagonal winning backward slash
+            if (sum==3){
+                printf("Winning condition has been met, Player 2 won\n");
+                checkwinbool=1;
+            }
+            if (sum==-3){
+                printf("Winning condition has been met, Player 1 won\n");
+                checkwinbool=1;
+            }
+            sum=cube[2][m][0]+cube[1][m][1]+cube[0][m][2]; // checks for row diagonal winning forward slash
+            if (sum==3){
+                printf("Winning condition has been met, Player 2 won\n");
+                checkwinbool=1;
+            }
+            if (sum==-3){
+                printf("Winning condition has been met, Player 1 won\n");
+                checkwinbool=1;
+            } //end of row diagonal check start of column diagonal
+            sum=cube[0][0][m]+cube[1][1][m]+cube[2][2][m]; // checks for column diagonal winning backward slash
+            if (sum==3){
+                printf("Winning condition has been met, Player 2 won\n");
+                checkwinbool=1;
+            }
+            if (sum==-3){
+                printf("Winning condition has been met, Player 1 won\n");
+                checkwinbool=1;
+            }
+            sum=cube[2][0][m]+cube[1][1][m]+cube[0][2][m]; // checks for column diagonal winning forward slash
+            if (sum==3){
+                printf("Winning condition has been met, Player 2 won\n");
+                checkwinbool=1;
+            }
+            if (sum==-3){
+                printf("Winning condition has been met, Player 1 won\n");
+                checkwinbool=1;
+            } //end of column diagonal check
+            
+    }
+
+    
+    if (checkwinbool==1){
+        return 1;
+    } else {
+        return 0;
+    }
+}
 
 int main() {
 int cube[3][3][3];
 int pos;
 int f,r,c;
+int choice;
+int whilecr;
+int boolfor=0; //boolfor will become 1 if someone wins
+int centerchecker; //centerchecker will remain 0 if pos =111
 for (int i=0;i<3;i++){
     for (int j=0;j<3;j++){
         for (int k=0; k<3;k++){
-            cube[i][j][k]=1;
+            cube[i][j][k]=0;
         }
     }
 }
-//face 0 back face 1 mid face 2 front
-
-printf("Back face 0\n");
-for (int i=0;i<3;i++){
-    for (int j=0;j<3;j++){
-        if (cube[0][i][j]==0) {
-            printf("_ ");
+print3d(cube, 0, "Back"); // print back face
+print3d(cube, 1, "Mid");    //print mid face
+print3d(cube, 2, "Front");  //print front face
+printf("Player 1 will be the O and Player 2 will be the X\n");
+for(int l=0;boolfor==0;l++){ //for loop exits if there has been 27 inputs or booldor becomes not 0
+    printf("Player 1, please input 1 for inputting on a new block, please input 2, for switching a block that already has an input\n");
+    scanf("%d",&choice);
+    if (choice==1){
+        whilecr=0;
+        while (whilecr<1){ 
+        centerchecker=0;
+        while (centerchecker==0){ //center checking when inputing on new block, on switching it is not needed because
+            printf("Player 1, Which positon would you like to enter your O \n");
+            scanf("%d",&pos);
+            if (pos==111){
+             printf("You cannot put your mark on face 1, row 1 column 1. Please enter a position again\n");    
+            } else{
+            centerchecker=1;
+            }
         }
-        if (cube[0][i][j]==-1) {
-            printf("O ");
-        }
-        if (cube[0][i][j]==1) {
-            printf("x ");
-        }
-    }
-    printf("\n");
-}
-printf("Mid face 1\n");
-for (int i=0;i<3;i++){
-    for (int j=0;j<3;j++){
-        if (cube[1][i][j]==0) {
-            printf("_ ");
-        }
-        if (cube[1][i][j]==-1) {
-            printf("O ");
-        }
-        if (cube[1][i][j]==1) {
-            printf("x ");
-        }
-    }
-    printf("\n");
-}
-printf("Front face 2\n");
-for (int i=0;i<3;i++){
-    for (int j=0;j<3;j++){
-        if (cube[2][i][j]==0) {
-            printf("_ ");
-        }
-        if (cube[2][i][j]==-1) {
-            printf("O ");
-        }
-        if (cube[2][i][j]==1) {
-            printf("x ");
+        f= (pos-(pos % 100))/100; // face number
+        r= (pos % 100-pos % 10)/10; //row number
+        c= pos % 10;        //column number
+        if (cube[f][r][c]==0){ //checks if tictactoe location is blank
+            cube[f][r][c]=-1;
+            printf("An O has been placed on face %d, row %d,column %d \n",f,r,c);
+            print3d(cube, 0, "Back");
+            print3d(cube, 1, "Mid");
+            print3d(cube, 2, "Front");
+            whilecr=1;
+            } else {
+            printf("Face %d, row %d,column %d already has a value Player chose to input on a new block \n",f,r,c);
+            }
         }
     }
-    printf("\n");
+    if (choice==2){
+        whilecr=0;
+        while (whilecr<1){ 
+            printf("Player 1(O), Which positon would you switch your O \n");
+            scanf("%d",&pos);
+        f= (pos-(pos % 100))/100; // face number
+        r= (pos % 100-pos % 10)/10; //row number
+        c= pos % 10;        //column number
+        if (cube[f][r][c]==1){ //checks if tictactoe location is already has an X
+            cube[f][r][c]=-1;
+            printf("An O has been switched on face %d, row %d,column %d \n",f,r,c);
+            print3d(cube, 0, "Back");
+            print3d(cube, 1, "Mid");
+            print3d(cube, 2, "Front");
+            whilecr=1;
+            } else {
+            printf("Face %d, row %d,column %d does not have an X, Player chose to switch for this turn \n",f,r,c);
+            }
+        }
+    }
+    boolfor=checkwin(cube);
+    if (boolfor==1){
+    exit(0);
+    }
+    //end of player 1's turn
+    printf("Player 2, please input 1 for inputting on a new block, please input 2, for switching a block that already has an input\n");
+    scanf("%d",&choice);
+    if (choice==1){
+        whilecr=0;
+        while (whilecr<1){
+        centerchecker=0;
+        while (centerchecker==0){
+            printf("Player 2(X), Which positon would you like to enter your X \n");
+            scanf("%d",&pos);
+            if (pos==111){
+             printf("You cannot put your mark on face 1, row 1 column 1. Please enter a position again\n");    
+            } else{
+            centerchecker=1;
+            }
+        }
+        f= (pos-(pos % 100))/100; // face number
+        r= (pos % 100-pos % 10)/10; //row number
+        c= pos % 10;        //column number
+        if (cube[f][r][c]==0){ //checks if tictactoe location is blank
+            cube[f][r][c]=1;
+            printf("An X has been placed on face %d, row %d,column %d \n",f,r,c);
+            print3d(cube, 0, "Back");
+            print3d(cube, 1, "Mid");
+            print3d(cube, 2, "Front");
+            whilecr=1;
+            } else {
+            printf("Face %d, row %d,column %d already has a value Player chose to input on a new block \n",f,r,c);
+            }
+        }
+    }
+    if (choice==2){
+        whilecr=0;
+        while (whilecr<1){
+        printf("Player 2(X), Which positon would you like to switch your X \n");
+        scanf("%d",&pos);
+        f= (pos-(pos % 100))/100; // face number
+        r= (pos % 100-pos % 10)/10; //row number
+        c= pos % 10;        //column number
+        if (cube[f][r][c]==-1){ //checks if tictactoe location is already has an O
+            cube[f][r][c]=1;
+            printf("An X has been switched on face %d, row %d,column %d \n",f,r,c);
+            print3d(cube, 0, "Back");
+            print3d(cube, 1, "Mid");
+            print3d(cube, 2, "Front");
+            whilecr=1;
+            } else {
+            printf("Face %d, row %d,column %d does not have an O, player chose to switch for this turn \n",f,r,c);
+            }
+        }
+    }
+    boolfor=checkwin(cube);
+    //end of player 2's turn
 }
-printf("Which positon would you like to enter your X or O \n");
-scanf("%d",&pos);
-f= (pos-(pos % 100))/100; // face number
-r= (pos % 100-pos % 10)/10; //row number
-c= pos % 10;        //column number
-printf("%d %d %d",f,r,c);
-//111 is not available
-
     return 0;
 }
